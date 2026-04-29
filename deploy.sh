@@ -312,7 +312,11 @@ EOF
 if [ ! -f detector/config.yaml ]; then
     cat > detector/config.yaml << 'EOF'
 slack:
+<<<<<<< HEAD
   webhook_url: "PLACEHOLDER_URL"
+=======
+  webhook_url: "YOUR_WEBHOOK_URL_HERE"
+>>>>>>> 8a18564 (Your commit message (removed hardcoded secret))
 detection:
   threshold: 50
 dashboard:

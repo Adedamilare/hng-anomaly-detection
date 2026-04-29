@@ -36,7 +36,11 @@ class Notifier:
 
     def _validate_webhook_url(self):
         """Fix 8: Validate webhook URL format"""
+<<<<<<< HEAD
         if self.webhook_url == "PLACEHOLDER_URL":
+=======
+        if self.webhook_url == "YOUR_WEBHOOK_URL_HERE":
+>>>>>>> 8a18564 (Your commit message (removed hardcoded secret))
             logger.warning("Using simulated mode - no real Slack notifications will be sent")
             return
 
@@ -124,7 +128,11 @@ class Notifier:
                 logger.debug(f"Skipping alert due to throttling: {alert_key}")
                 return
 
+<<<<<<< HEAD
         if self.webhook_url == "PLACEHOLDER_URL":
+=======
+        if self.webhook_url == "YOUR_WEBHOOK_URL_HERE":
+>>>>>>> 8a18564 (Your commit message (removed hardcoded secret))
             logger.info(f"SIMULATED ALERT: {message}")
             return
 
@@ -186,7 +194,11 @@ class Notifier:
     async def get_stats(self) -> Dict[str, Any]:
         """Get notifier statistics"""
         return {
+<<<<<<< HEAD
             'webhook_configured': self.webhook_url != "PLACEHOLDER_URL",
+=======
+            'webhook_configured': self.webhook_url != "YOUR_WEBHOOK_URL_HERE",
+>>>>>>> 8a18564 (Your commit message (removed hardcoded secret))
             'successful_alerts': self.successful_alerts_count,
             'failed_alerts': self.failed_alerts_count,
             'rate_limit_enabled': self.rate_limit_enabled,

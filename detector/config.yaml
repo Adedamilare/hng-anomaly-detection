@@ -1,6 +1,10 @@
 # detector/config.yaml - COMPLETE WORKING VERSION
 slack:
+<<<<<<< HEAD
   webhook_url: "PLACEHOLDER_URL"  # REPLACE WITH ACTUAL WEBHOOK URL
+=======
+  webhook_url: "YOUR_WEBHOOK_URL_HERE"  # REPLACE WITH ACTUAL WEBHOOK URL
+>>>>>>> 8a18564 (Your commit message (removed hardcoded secret))
 
 detection:
   z_score_threshold: 3.0
