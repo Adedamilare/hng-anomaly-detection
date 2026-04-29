@@ -36,7 +36,7 @@ class Notifier:
 
     def _validate_webhook_url(self):
         """Fix 8: Validate webhook URL format"""
-        if self.webhook_url == "hng-anomaly-detection.slack.com":
+        if self.webhook_url == "PLACEHOLDER_URL":
             logger.warning("Using simulated mode - no real Slack notifications will be sent")
             return
 
@@ -124,7 +124,7 @@ class Notifier:
                 logger.debug(f"Skipping alert due to throttling: {alert_key}")
                 return
 
-        if self.webhook_url == "hng-anomaly-detection.slack.com":
+        if self.webhook_url == "PLACEHOLDER_URL":
             logger.info(f"SIMULATED ALERT: {message}")
             return
 
@@ -186,7 +186,7 @@ class Notifier:
     async def get_stats(self) -> Dict[str, Any]:
         """Get notifier statistics"""
         return {
-            'webhook_configured': self.webhook_url != "hng-anomaly-detection.slack.com",
+            'webhook_configured': self.webhook_url != "PLACEHOLDER_URL",
             'successful_alerts': self.successful_alerts_count,
             'failed_alerts': self.failed_alerts_count,
             'rate_limit_enabled': self.rate_limit_enabled,

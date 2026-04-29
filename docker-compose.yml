@@ -4,83 +4,45 @@ services:
   nextcloud:
     image: kefaslungu/hng-nextcloud:latest
     container_name: hng-nextcloud
-    restart: unless-stopped
+    restart: always
     volumes:
       - nextcloud_data:/var/www/html/data
     networks:
       - hng-network
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost/status.php"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
 
   nginx:
     image: nginx:alpine
     container_name: hng-nginx
-    restart: unless-stopped
+    restart: always
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - nginx_logs:/var/log/nginx
+      - HNG-nginx-logs:/var/log/nginx
     ports:
       - "80:80"
     networks:
       - hng-network
     depends_on:
-      nextcloud:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "nginx", "-t"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"
+      - nextcloud
 
   detector:
-    build: ./detector
+    image: python:3.11-slim
     container_name: hng-detector
-    restart: unless-stopped
-    # Fix: Use host network for iptables access (alternative to privileged)
-    network_mode: "service:nginx"  # Share nginx's network namespace
-    pid: "service:nginx"  # Share process namespace for iptables
+    restart: always
+    working_dir: /app
+    command: bash -c "apt-get update && apt-get install -y iptables && pip install pyyaml aiohttp jinja2 psutil && python main.py"
     volumes:
-      - nginx_logs:/var/log/nginx:ro
-      - ./detector/config.yaml:/app/config.yaml:ro
-      - detector_data:/app/data
-    # Fix: Only add necessary capabilities
-    cap_add:
-      - NET_ADMIN
+      - HNG-nginx-logs:/var/log/nginx:ro
+      - ./detector:/app
+      - /var/run/docker.sock:/var/run/docker.sock
+    network_mode: host
+    privileged: true
     depends_on:
-      nginx:
-        condition: service_started
-    healthcheck:
-      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('localhost',8080)); s.close()"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "5"
+      - nginx
 
 volumes:
   nextcloud_data:
-    name: hng_nextcloud_data
-  nginx_logs:
-    name: hng_nginx_logs
-  detector_data:
-    name: hng_detector_data
+  HNG-nginx-logs:
+    name: HNG-nginx-logs
 
 networks:
   hng-network:

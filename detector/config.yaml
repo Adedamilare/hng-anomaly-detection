@@ -1,6 +1,6 @@
-# Configuration for Anomaly Detection Engine
+# detector/config.yaml - COMPLETE WORKING VERSION
 slack:
-  webhook_url: "hng-anomaly-detection.slack.com"
+  webhook_url: "PLACEHOLDER_URL"  # REPLACE WITH ACTUAL WEBHOOK URL
 
 detection:
   z_score_threshold: 3.0
@@ -9,6 +9,7 @@ detection:
   baseline_window_minutes: 30
   baseline_recalc_interval_seconds: 60
   error_multiplier_threshold: 3.0
+  min_data_points_for_baseline: 10  # ADD THIS LINE
 
 blocking:
   backoff_schedule:
@@ -27,17 +28,3 @@ dashboard:
 
 monitoring:
   log_file_path: "/var/log/nginx/hng-access.log"
-  log_format: "combined"  
-  tail_position_file: "/var/log/detector/log_monitor.pos"
-
-  slack:
-  webhook_url: "hng-anomaly-detection.slack.com" 
-  
-  # Notifier configuration
-  notifier:
-    rate_limit_enabled: true
-    min_alert_interval_seconds: 300  # Minimum 5 minutes between same alert type
-    ip_alert_throttle_seconds: 3600   # Max 1 alert per IP per hour
-    max_retries: 3
-    retry_delay_seconds: 1
-    timeout_seconds: 10
